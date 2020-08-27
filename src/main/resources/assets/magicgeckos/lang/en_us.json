@@ -1,5 +1,5 @@
 {
   "itemGroup.magicgeckostab": "Magic Geckos",
-  "item.magicgeckos.test_egg": "Test Egg",
-  "block.magicgeckos.test_block": "Test Block"
+  "item.magicgeckos.def_item": "Test Egg",
+  "block.magicgeckos.def_block": "Test Block"
 }

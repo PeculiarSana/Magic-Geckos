@@ -1,0 +1,140 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.magicgeckos.gecko_walk": {
+			"animation_length": 1,
+			"bones": {
+				"Body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [0, 10, 0],
+							"easing": "linear"
+						},
+						"0.76": {
+							"vector": [0, -10, 0],
+							"easing": "linear"
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "linear"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Tail1": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Tail2": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Tail3": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Leg_BL1": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Leg_BL2": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Leg_BR1": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Leg_BR2": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Leg_FR1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [0, 47.5, 0]
+						},
+						"0.76": {
+							"vector": [5, -20, -7.5]
+						}
+					}
+				},
+				"Leg_FR2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [-22.5, 45, -17.5]
+						},
+						"0.76": {
+							"vector": [22.5, -37.5, 5]
+						}
+					}
+				},
+				"Torso": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [0, -20, 0],
+							"easing": "linear"
+						},
+						"0.76": {
+							"vector": [0, 20, 0],
+							"easing": "linear"
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "linear"
+						}
+					}
+				},
+				"Leg_FL1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [-5, 37.5, 7.5]
+						},
+						"0.76": {
+							"vector": [-17.5, -45, 12.5]
+						}
+					}
+				},
+				"Leg_FL2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [37.5, 52.5, 0]
+						},
+						"0.76": {
+							"vector": [-5, -27.5, -17.5]
+						}
+					}
+				}
+			}
+		}
+	}
+}

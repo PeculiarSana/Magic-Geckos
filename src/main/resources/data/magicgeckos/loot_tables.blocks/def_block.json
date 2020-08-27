@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "magicgeckos:example_block"
+          "name": "magicgeckos:def_block"
         }
       ]
     }
