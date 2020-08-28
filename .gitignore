@@ -1,33 +1,25 @@
-## Windows
-Thumbs.db
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-## gradle
-/.gradle
-/build
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
 
-## ForgeGradle
-/run
+# gradle
+build
+.gradle
 
-## eclipse
-/.settings
-/.metadata
-/.classpath
-/.project
-/eclipse
-/bin
+# other
+eclipse
+run
 
-## intellij
-/out
-/.idea
-/atlassian-ide-plugin.xml
-/*.ipr
-/*.iws
-/*.iml
-/classes
-
-## Private Stuffs
-/private.properties
-
-## Jars
-*.jar
-!/gradle/wrapper/gradle-wrapper.jar
+# Files from Forge MDK
+forge*changelog.txt
