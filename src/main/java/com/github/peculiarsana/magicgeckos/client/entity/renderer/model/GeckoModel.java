@@ -24,10 +24,9 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
     private final AnimatedModelRenderer Leg_BR1;
     private final AnimatedModelRenderer Leg_BR2;
 
-    public GeckoModel()
-    {
+    public GeckoModel() {
         textureWidth = 32;
-        textureHeight = 32;
+        textureHeight = 16;
         Body = new AnimatedModelRenderer(this);
         Body.setRotationPoint(0.0F, 21.5F, -0.5F);
         Body.setTextureOffset(14, 0).addBox(-1.5F, -0.75F, 0.75F, 3.0F, 2.0F, 3.0F, -0.1F, false);
@@ -59,10 +58,10 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         this.registerModelRenderer(Leg_FR1);
 
         Leg_FR2 = new AnimatedModelRenderer(this);
-        Leg_FR2.setRotationPoint(-0.0302F, 0.1763F, -1.5767F);
+        Leg_FR2.setRotationPoint(-0.0302F, -0.0737F, -1.5767F);
         Leg_FR1.addChild(Leg_FR2);
         setRotationAngle(Leg_FR2, 0.7495F, -0.9893F, -0.0398F);
-        Leg_FR2.setTextureOffset(0, 29).addBox(-0.6101F, -0.7951F, -1.738F, 1.0F, 1.0F, 2.0F, 0.0F, true);
+        Leg_FR2.setTextureOffset(16, 6).addBox(-0.6156F, -0.6066F, -1.9021F, 1.0F, 1.0F, 2.0F, 0.0F, true);
         Leg_FR2.setModelRendererName("Leg_FR2");
         this.registerModelRenderer(Leg_FR2);
 
@@ -75,10 +74,10 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         this.registerModelRenderer(Leg_FL1);
 
         Leg_FL2 = new AnimatedModelRenderer(this);
-        Leg_FL2.setRotationPoint(0.0302F, 0.1763F, -1.5767F);
+        Leg_FL2.setRotationPoint(0.0302F, -0.0737F, -1.5767F);
         Leg_FL1.addChild(Leg_FL2);
         setRotationAngle(Leg_FL2, 0.7495F, 0.9893F, 0.0398F);
-        Leg_FL2.setTextureOffset(0, 29).addBox(-0.3899F, -0.7951F, -1.738F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        Leg_FL2.setTextureOffset(16, 6).addBox(-0.3844F, -0.6066F, -1.9021F, 1.0F, 1.0F, 2.0F, 0.0F, false);
         Leg_FL2.setModelRendererName("Leg_FL2");
         this.registerModelRenderer(Leg_FL2);
 
@@ -115,10 +114,10 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         this.registerModelRenderer(Leg_BL1);
 
         Leg_BL2 = new AnimatedModelRenderer(this);
-        Leg_BL2.setRotationPoint(0.0254F, 0.2774F, -1.5079F);
+        Leg_BL2.setRotationPoint(0.0254F, 0.0274F, -1.5079F);
         Leg_BL1.addChild(Leg_BL2);
         setRotationAngle(Leg_BL2, 0.2187F, 0.9409F, -2.1782F);
-        Leg_BL2.setTextureOffset(24, 28).addBox(-0.199F, -0.3545F, -2.5747F, 1.0F, 1.0F, 3.0F, 0.0F, false);
+        Leg_BL2.setTextureOffset(11, 6).addBox(-0.3199F, -0.5298F, -2.7057F, 1.0F, 1.0F, 3.0F, 0.0F, false);
         Leg_BL2.setModelRendererName("Leg_BL2");
         this.registerModelRenderer(Leg_BL2);
 
@@ -131,10 +130,10 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         this.registerModelRenderer(Leg_BR1);
 
         Leg_BR2 = new AnimatedModelRenderer(this);
-        Leg_BR2.setRotationPoint(-0.0254F, 0.2774F, -1.5079F);
+        Leg_BR2.setRotationPoint(-0.0254F, 0.0274F, -1.5079F);
         Leg_BR1.addChild(Leg_BR2);
         setRotationAngle(Leg_BR2, 0.2176F, -0.9409F, 2.1782F);
-        Leg_BR2.setTextureOffset(24, 28).addBox(-0.801F, -0.3545F, -2.5747F, 1.0F, 1.0F, 3.0F, 0.0F, true);
+        Leg_BR2.setTextureOffset(11, 6).addBox(-0.6801F, -0.5296F, -2.7059F, 1.0F, 1.0F, 3.0F, 0.0F, true);
         Leg_BR2.setModelRendererName("Leg_BR2");
         this.registerModelRenderer(Leg_BR2);
 

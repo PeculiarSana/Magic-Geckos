@@ -2,6 +2,7 @@ package com.github.peculiarsana.magicgeckos.init;
 
 import com.github.peculiarsana.magicgeckos.MagicGeckos;
 import com.github.peculiarsana.magicgeckos.MagicGeckos.MagicGeckosItemGroup;
+import com.github.peculiarsana.magicgeckos.items.ModSpawnEggItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -13,4 +14,10 @@ public class ItemInit {
 
     public static final RegistryObject<Item> DEF_ITEM = ITEMS.register("def_item",
             () -> new Item(new Item.Properties().group(MagicGeckosItemGroup.instance)));
+
+    public static final RegistryObject<ModSpawnEggItem> TEST_EGG = ITEMS.register("test_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.GECKO, 0xF5CD67, 0x474130,
+                    new Item.Properties().group(MagicGeckosItemGroup.instance)
+                    .maxStackSize(16)
+            ));
 }
