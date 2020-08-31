@@ -38,6 +38,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
         typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/super_snow.png"));
         typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
+        typeTex.put(100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
     });
     EntityAnimationManager manager = new EntityAnimationManager();
     EntityAnimationController controller = new EntityAnimationController(
