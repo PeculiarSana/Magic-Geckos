@@ -1,14 +1,13 @@
 package com.github.peculiarsana.magicgeckos.entities;
 
-import com.github.peculiarsana.magicgeckos.data.CapabilityEntityVariant;
-import com.github.peculiarsana.magicgeckos.data.DefaultEntityVariant;
-import com.github.peculiarsana.magicgeckos.data.IEntityVariant;
+import com.github.peculiarsana.magicgeckos.MagicGeckos;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -34,12 +33,12 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
     public static final Map<Integer, ResourceLocation> TEXTURE_BY_ID = Util.make(Maps.newHashMap(), (typeTex) -> {
-        typeTex.put(0, new ResourceLocation("textures/entity/gecko/leopard.png"));
-        typeTex.put(1, new ResourceLocation("textures/entity/gecko/black.png"));
+        typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
+        typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
+        typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
+        typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/super_snow.png"));
+        typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
     });
-
-    private int geckoType;
-
     EntityAnimationManager manager = new EntityAnimationManager();
     EntityAnimationController controller = new EntityAnimationController(
             this, "geckoController", 20, this::animationPredicate
@@ -48,10 +47,10 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     public GeckoEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         registerAnimationControllers();
-        this.getCapability(CapabilityEntityVariant.ENTITY_VARIANT_CAPABILITY).ifPresent(h -> {
-            this.geckoType = h.getVariant();
-        });
-        this.dataManager.set(GECKO_TYPE, geckoType);
+    }
+
+    public ResourceLocation getGeckoTypeTex() {
+        return TEXTURE_BY_ID.getOrDefault(this.getGeckoType(), TEXTURE_BY_ID.get(0));
     }
 
     @Override
@@ -59,6 +58,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         GeckoEntity entity = new GeckoEntity(ModEntityTypes.GECKO.get(), this.world);
         entity.onInitialSpawn(this.world, this.world.getDifficultyForLocation(new BlockPos(entity)),
                 SpawnReason.BREEDING, (ILivingEntityData) null, (CompoundNBT) null);
+        entity.setGrowingAge(-10000);
         if (ageable instanceof GeckoEntity) {
             if (this.rand.nextBoolean()) {
                 entity.setGeckoType(this.getGeckoType());
@@ -75,9 +75,19 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     public void setGeckoType(int type) {
         dataManager.set(GECKO_TYPE, type);
-        this.getCapability(CapabilityEntityVariant.ENTITY_VARIANT_CAPABILITY).ifPresent(h -> {
-            h.setVariant(type);
-        });
+    }
+
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putInt("GeckoType", this.getGeckoType());
+    }
+
+    /**
+     * (abstract) Protected helper method to read subclass entity data from NBT.
+     */
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.setGeckoType(compound.getInt("GeckoType"));
     }
 
     @Override
@@ -97,13 +107,8 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setGeckoType(this.rand.nextInt(2));
+        this.setGeckoType(this.rand.nextInt(5));
         return spawnDataIn;
-    }
-
-    @Override
-    protected PathNavigator createNavigator(World worldIn) {
-        return super.createNavigator(worldIn);
     }
 
     @Override

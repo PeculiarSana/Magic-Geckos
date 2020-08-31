@@ -6,6 +6,7 @@ import com.github.peculiarsana.magicgeckos.client.entity.renderer.model.GeckoMod
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,20 +16,19 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class GeckoRenderer extends MobRenderer<GeckoEntity, GeckoModel> {
 
-    protected static ResourceLocation TEXTURE = null;
-
     public GeckoRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new GeckoModel(), 0.2f);
+    }
+
+    protected void preRenderCallback(GeckoEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+        super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+        matrixStackIn.scale(0.7F, 0.7F, 0.7F);
     }
 
     @Nullable
     @Override
     public ResourceLocation getEntityTexture(GeckoEntity entity) {
-            switch(entity.getGeckoType()) {
-                case 0: TEXTURE = new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/leopard.png"); break;
-                case 1: TEXTURE = new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/velvet.png"); break;
-            }
-        return TEXTURE;
+        return entity.getGeckoTypeTex();
     }
 
     @Override

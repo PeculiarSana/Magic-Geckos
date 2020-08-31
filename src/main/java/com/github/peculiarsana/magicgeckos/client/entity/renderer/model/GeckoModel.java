@@ -24,12 +24,13 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
     private final AnimatedModelRenderer Leg_BR1;
     private final AnimatedModelRenderer Leg_BR2;
 
-    public GeckoModel() {
+    public GeckoModel()
+    {
         textureWidth = 32;
         textureHeight = 16;
         Body = new AnimatedModelRenderer(this);
         Body.setRotationPoint(0.0F, 21.5F, -0.5F);
-        Body.setTextureOffset(14, 0).addBox(-1.5F, -0.75F, 0.75F, 3.0F, 2.0F, 3.0F, -0.1F, false);
+        Body.setTextureOffset(20, 0).addBox(-1.5F, -0.75F, 0.75F, 3.0F, 2.0F, 3.0F, -0.1F, false);
         Body.setModelRendererName("Body");
         this.registerModelRenderer(Body);
 
@@ -45,7 +46,7 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Head.setRotationPoint(0.0F, -0.0549F, -3.4696F);
         Torso.addChild(Head);
         setRotationAngle(Head, 0.2618F, 0.0F, 0.0F);
-        Head.setTextureOffset(0, 0).addBox(-1.5F, -1.1307F, -3.7557F, 3.0F, 2.0F, 4.0F, -0.1F, false);
+        Head.setTextureOffset(6, 0).addBox(-1.5F, -1.1307F, -3.7557F, 3.0F, 2.0F, 4.0F, -0.1F, false);
         Head.setModelRendererName("Head");
         this.registerModelRenderer(Head);
 
@@ -85,23 +86,23 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Tail1.setRotationPoint(0.0F, -0.15F, 3.6F);
         Body.addChild(Tail1);
         setRotationAngle(Tail1, -0.3054F, 0.0F, 0.0F);
-        Tail1.setTextureOffset(24, 0).addBox(-1.0F, -0.6F, -0.35F, 2.0F, 2.0F, 2.0F, -0.25F, false);
+        Tail1.setTextureOffset(6, 12).addBox(-1.0F, -0.5699F, -0.4454F, 2.0F, 2.0F, 2.0F, -0.35F, false);
         Tail1.setModelRendererName("Tail1");
         this.registerModelRenderer(Tail1);
 
         Tail2 = new AnimatedModelRenderer(this);
         Tail2.setRotationPoint(0.0F, 0.0434F, 1.1538F);
         Tail1.addChild(Tail2);
-        setRotationAngle(Tail2, 0.0873F, 0.0F, 0.0F);
-        Tail2.setTextureOffset(24, 4).addBox(-0.5F, -0.6F, -0.25F, 1.0F, 2.0F, 3.0F, -0.25F, false);
+        setRotationAngle(Tail2, 0.1745F, 0.0F, 0.0F);
+        Tail2.setTextureOffset(14, 10).addBox(-1.0F, -0.6715F, -0.4699F, 2.0F, 2.0F, 4.0F, -0.25F, false);
         Tail2.setModelRendererName("Tail2");
         this.registerModelRenderer(Tail2);
 
         Tail3 = new AnimatedModelRenderer(this);
-        Tail3.setRotationPoint(0.0F, 0.4F, 2.35F);
+        Tail3.setRotationPoint(0.0F, 0.15F, 3.1F);
         Tail2.addChild(Tail3);
         setRotationAngle(Tail3, 0.1309F, 0.0F, 0.0F);
-        Tail3.setTextureOffset(24, 9).addBox(-0.5F, -0.5F, -0.1F, 1.0F, 1.0F, 3.0F, 0.0F, false);
+        Tail3.setTextureOffset(0, 13).addBox(-0.5F, -0.35F, 0.0238F, 1.0F, 1.0F, 2.0F, 0.0F, false);
         Tail3.setModelRendererName("Tail3");
         this.registerModelRenderer(Tail3);
 

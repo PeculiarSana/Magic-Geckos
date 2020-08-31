@@ -61,8 +61,7 @@ public class MagicGeckos {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        MinecraftForge.EVENT_BUS.addListener(VariantEventHandler::onAttachCapabilitiesEvent);
-        CapabilityEntityVariant.register();
+
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
