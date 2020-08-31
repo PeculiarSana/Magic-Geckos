@@ -26,7 +26,15 @@ import software.bernie.geckolib.manager.EntityAnimationManager;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-
+//TODO:
+// Ability to cling onto walls
+// Spawning in warm biomes
+// Babies
+// Taming
+// Drops
+// Sound Effects
+// More Rare variants
+// Faster anim speed when running
 public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
@@ -40,7 +48,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     });
     EntityAnimationManager manager = new EntityAnimationManager();
     EntityAnimationController controller = new EntityAnimationController(
-            this, "geckoController", 20, this::animationPredicate
+            this, "geckoController", 10, this::animationPredicate
     );
 
     public GeckoEntity(EntityType<? extends TameableEntity> type, World worldIn) {
