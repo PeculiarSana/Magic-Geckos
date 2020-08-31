@@ -1,12 +1,10 @@
 package com.github.peculiarsana.magicgeckos.client.entity.renderer;
 
-import com.github.peculiarsana.magicgeckos.MagicGeckos;
 import com.github.peculiarsana.magicgeckos.entities.GeckoEntity;
 import com.github.peculiarsana.magicgeckos.client.entity.renderer.model.GeckoModel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

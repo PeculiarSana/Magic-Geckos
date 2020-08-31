@@ -2,8 +2,6 @@
 package com.github.peculiarsana.magicgeckos.client.entity.renderer.model;
 
 import com.github.peculiarsana.magicgeckos.entities.GeckoEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib.animation.model.AnimatedEntityModel;
 import software.bernie.geckolib.animation.render.AnimatedModelRenderer;
@@ -16,9 +14,12 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
     private final AnimatedModelRenderer Leg_FR2;
     private final AnimatedModelRenderer Leg_FL1;
     private final AnimatedModelRenderer Leg_FL2;
+    private final AnimatedModelRenderer Torso_Spines;
+    private final AnimatedModelRenderer Body_Spines;
     private final AnimatedModelRenderer Tail1;
     private final AnimatedModelRenderer Tail2;
     private final AnimatedModelRenderer Tail3;
+    private final AnimatedModelRenderer Tail2_Small;
     private final AnimatedModelRenderer Leg_BL1;
     private final AnimatedModelRenderer Leg_BL2;
     private final AnimatedModelRenderer Leg_BR1;
@@ -82,6 +83,24 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Leg_FL2.setModelRendererName("Leg_FL2");
         this.registerModelRenderer(Leg_FL2);
 
+        Torso_Spines = new AnimatedModelRenderer(this);
+        Torso_Spines.setRotationPoint(0.0F, 0.0F, 0.0F);
+        Torso.addChild(Torso_Spines);
+        Torso_Spines.setTextureOffset(0, 0).addBox(0.75F, -1.6F, -2.75F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Torso_Spines.setTextureOffset(0, 0).addBox(0.75F, -1.6F, -1.0F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Torso_Spines.setTextureOffset(0, 0).addBox(-0.75F, -1.6F, -2.75F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Torso_Spines.setTextureOffset(0, 0).addBox(-0.75F, -1.6F, -1.0F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Torso_Spines.setModelRendererName("Torso_Spines");
+        this.registerModelRenderer(Torso_Spines);
+
+        Body_Spines = new AnimatedModelRenderer(this);
+        Body_Spines.setRotationPoint(0.0F, 0.0F, 0.0F);
+        Body.addChild(Body_Spines);
+        Body_Spines.setTextureOffset(0, 0).addBox(0.75F, -1.6F, 1.75F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Body_Spines.setTextureOffset(0, 0).addBox(-0.75F, -1.6F, 1.75F, 0.0F, 1.0F, 1.0F, 0.0F, false);
+        Body_Spines.setModelRendererName("Body_Spines");
+        this.registerModelRenderer(Body_Spines);
+
         Tail1 = new AnimatedModelRenderer(this);
         Tail1.setRotationPoint(0.0F, -0.15F, 3.6F);
         Body.addChild(Tail1);
@@ -106,6 +125,13 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Tail3.setModelRendererName("Tail3");
         this.registerModelRenderer(Tail3);
 
+        Tail2_Small = new AnimatedModelRenderer(this);
+        Tail2_Small.setRotationPoint(0.0F, 0.0F, 1.1F);
+        Tail1.addChild(Tail2_Small);
+        Tail2_Small.setTextureOffset(0, 0).addBox(-0.5F, -0.1F, -0.25F, 1.0F, 1.0F, 2.0F, -0.1F, false);
+        Tail2_Small.setModelRendererName("Tail2_Small");
+        this.registerModelRenderer(Tail2_Small);
+
         Leg_BL1 = new AnimatedModelRenderer(this);
         Leg_BL1.setRotationPoint(1.05F, 0.5F, 2.6F);
         Body.addChild(Leg_BL1);
@@ -117,7 +143,7 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Leg_BL2 = new AnimatedModelRenderer(this);
         Leg_BL2.setRotationPoint(0.0254F, 0.0274F, -1.5079F);
         Leg_BL1.addChild(Leg_BL2);
-        setRotationAngle(Leg_BL2, 0.2187F, 0.9409F, -2.1782F);
+        setRotationAngle(Leg_BL2, 0.3496F, 0.9409F, -2.1782F);
         Leg_BL2.setTextureOffset(11, 6).addBox(-0.3199F, -0.5298F, -2.7057F, 1.0F, 1.0F, 3.0F, 0.0F, false);
         Leg_BL2.setModelRendererName("Leg_BL2");
         this.registerModelRenderer(Leg_BL2);
@@ -133,7 +159,7 @@ public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
         Leg_BR2 = new AnimatedModelRenderer(this);
         Leg_BR2.setRotationPoint(-0.0254F, 0.0274F, -1.5079F);
         Leg_BR1.addChild(Leg_BR2);
-        setRotationAngle(Leg_BR2, 0.2176F, -0.9409F, 2.1782F);
+        setRotationAngle(Leg_BR2, 0.3837F, -0.971F, 2.1264F);
         Leg_BR2.setTextureOffset(11, 6).addBox(-0.6801F, -0.5296F, -2.7059F, 1.0F, 1.0F, 3.0F, 0.0F, true);
         Leg_BR2.setModelRendererName("Leg_BR2");
         this.registerModelRenderer(Leg_BR2);

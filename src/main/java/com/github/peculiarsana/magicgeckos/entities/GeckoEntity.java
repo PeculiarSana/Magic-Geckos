@@ -7,12 +7,10 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
@@ -59,7 +57,6 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         GeckoEntity entity = new GeckoEntity(ModEntityTypes.GECKO.get(), this.world);
         entity.onInitialSpawn(this.world, this.world.getDifficultyForLocation(new BlockPos(entity)),
                 SpawnReason.BREEDING, (ILivingEntityData) null, (CompoundNBT) null);
-        entity.setGrowingAge(-10000);
         if (ageable instanceof GeckoEntity) {
             if (this.rand.nextBoolean()) {
                 entity.setGeckoType(this.getGeckoType());

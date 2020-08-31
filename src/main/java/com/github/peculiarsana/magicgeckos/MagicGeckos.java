@@ -1,6 +1,5 @@
 package com.github.peculiarsana.magicgeckos;
 
-import com.github.peculiarsana.magicgeckos.data.*;
 import com.github.peculiarsana.magicgeckos.init.BlockInit;
 import com.github.peculiarsana.magicgeckos.init.ItemInit;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
@@ -11,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
