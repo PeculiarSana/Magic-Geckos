@@ -4,6 +4,7 @@ import com.github.peculiarsana.magicgeckos.init.BlockInit;
 import com.github.peculiarsana.magicgeckos.init.ItemInit;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
 import com.github.peculiarsana.magicgeckos.items.ModSpawnEggItem;
+import com.github.peculiarsana.magicgeckos.util.ModSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -40,8 +41,7 @@ public class MagicGeckos {
         ItemInit.ITEMS.register(modEventBus);
         BlockInit.BLOCKS.register(modEventBus);
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
-
-
+        ModSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -77,7 +77,7 @@ public class MagicGeckos {
         }
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ItemInit.DEF_ITEM.get());
+            return new ItemStack(ItemInit.TEST_EGG.get());
         }
     }
 

@@ -1,0 +1,7 @@
+{
+  "gecko_nom": {
+    "category": "entity",
+    "subtitle": "magicgeckos.subtitle.geckoNom",
+    "sounds": [ "magicgeckos:mlem" ]
+  }
+}

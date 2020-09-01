@@ -1,19 +1,32 @@
 package com.github.peculiarsana.magicgeckos.entities;
 
 import com.github.peculiarsana.magicgeckos.MagicGeckos;
+import com.github.peculiarsana.magicgeckos.init.ItemInit;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
+import com.github.peculiarsana.magicgeckos.util.ModSoundEvents;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ItemParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -24,7 +37,10 @@ import software.bernie.geckolib.event.AnimationTestEvent;
 import software.bernie.geckolib.manager.EntityAnimationManager;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 //TODO:
 // Ability to cling onto walls
@@ -35,6 +51,7 @@ import java.util.Map;
 // Sound Effects
 // More Rare variants
 // Faster anim speed when running
+// Head Looking
 public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
@@ -46,6 +63,15 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
         typeTex.put(100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
     });
+    //List containing all food items for Geckos
+    private static final List<Item> FOOD_ITEMS = Util.make(new ArrayList<Item>(), (list) -> {
+        list.add(ItemInit.WORM.get());
+    });
+    private static final Predicate<ItemEntity> TARGET_SELECTOR = (t) ->
+            !t.cannotPickup() && t.isAlive() && FOOD_ITEMS.contains(t.getItem().getItem());
+
+    private GeckoEntity.AvoidPlayerGoal<PlayerEntity> avoidPlayerGoal;
+
     EntityAnimationManager manager = new EntityAnimationManager();
     EntityAnimationController controller = new EntityAnimationController(
             this, "geckoController", 10, this::animationPredicate
@@ -53,6 +79,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     public GeckoEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        manager.setAnimationSpeed(2.0D);
         registerAnimationControllers();
     }
 
@@ -88,9 +115,6 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         compound.putInt("GeckoType", this.getGeckoType());
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.setGeckoType(compound.getInt("GeckoType"));
@@ -104,6 +128,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(
                 this, PlayerEntity.class, 5.0F, 1D, 1.5D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new GeckoEntity.FindItemsGoal());
     }
 
     protected void registerData() {
@@ -125,12 +150,96 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     @Override
+    public void livingTick() {
+        ItemStack itemstack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        if (!itemstack.isEmpty()) {
+            Vec3d vec3d = (new Vec3d(((double)this.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D)).rotatePitch(-this.rotationPitch * ((float)Math.PI / 180F)).rotateYaw(-this.rotationYaw * ((float)Math.PI / 180F));
+            this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + this.getLookVec().x / 2.0D, this.getPosY(), this.getPosZ() + this.getLookVec().z / 2.0D, vec3d.x, vec3d.y + 0.05D, vec3d.z);
+        }
+        super.livingTick();
+    }
+
+    // Creates a goal to avoid the player and only executes if this instance isn't tamed
+    protected void setupTamedAI() {
+        if (this.avoidPlayerGoal == null) {
+            this.avoidPlayerGoal = new GeckoEntity.AvoidPlayerGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
+        }
+
+        this.goalSelector.removeGoal(this.avoidPlayerGoal);
+        if (!this.isTamed()) {
+            this.goalSelector.addGoal(4, this.avoidPlayerGoal);
+        }
+    }
+
+    static class AvoidPlayerGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
+        private final GeckoEntity gecko;
+
+        public AvoidPlayerGoal(GeckoEntity geckoIn, Class<T> entityClassToAvoidIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
+            super(geckoIn, entityClassToAvoidIn, avoidDistanceIn, farSpeedIn, nearSpeedIn, EntityPredicates.CAN_AI_TARGET::test);
+            this.gecko = geckoIn;
+        }
+        public boolean shouldExecute() {
+            return !this.gecko.isTamed() && super.shouldExecute();
+        }
+
+        public boolean shouldContinueExecuting() {
+            return !this.gecko.isTamed() && super.shouldContinueExecuting();
+        }
+    }
+
+    //Goal to allow the Geckos to look for and navigate towards items in FOOD_ITEMS
+    //TODO: Make sure they can path to the item before navigating
+    // All nearby geckos share the same target no matter their distance from it
+    class FindItemsGoal extends Goal {
+
+        @Override
+        public boolean shouldExecute() {
+            List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class,
+                    GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
+            if (!list.isEmpty()) {MagicGeckos.LOGGER.debug(GeckoEntity.this.getEntityId() + " : " + list.get(0));}
+            return !list.isEmpty();
+        }
+
+        @Override
+        public void tick() {
+            List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class, GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
+            if (!list.isEmpty()) {
+                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F);
+                manager.setAnimationSpeed(1.5D);
+                controller.setAnimation(new AnimationBuilder()
+                        .addAnimation("animation.magicgeckos.gecko_walk", true));
+                if (!GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F))
+                {
+                    //TODO: Remove 1 item at a time
+                    playSound(ModSoundEvents.GECKO_NOM.get(), 1.0F, 1.0F);
+                    list.get(0).remove();
+                }
+            }
+        }
+
+        public void startExecuting() {
+            List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class, GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
+            if (!list.isEmpty()) {
+                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F);
+                manager.setAnimationSpeed(1.5D);
+                controller.setAnimation(new AnimationBuilder()
+                        .addAnimation("animation.magicgeckos.gecko_walk", true));
+            }
+        }
+    }
+
+    public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
+        //p_75494_2_ is the distance to stop from target entity, relative to the block it's on
+        Path path = this.getNavigator().getPathToEntity(entityIn, 0);
+        return path != null && this.getNavigator().setPath(path, speedIn);
+    }
+
+    @Override
     public EntityAnimationManager getAnimationManager() {
         return manager;
     }
 
     private <E extends Entity> boolean animationPredicate(AnimationTestEvent<E> event) {
-        manager.setAnimationSpeed(2.0D);
         if (event.isWalking()) {
             controller.setAnimation(new AnimationBuilder()
                     .addAnimation("animation.magicgeckos.gecko_walk", true));
