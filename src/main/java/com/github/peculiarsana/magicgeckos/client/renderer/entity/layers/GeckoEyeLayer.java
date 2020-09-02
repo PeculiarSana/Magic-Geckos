@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib.GeckoLib;
 
 import java.awt.*;
 
@@ -28,6 +29,8 @@ public class GeckoEyeLayer extends LayerRenderer<GeckoEntity, GeckoModel> {
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, GeckoEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         Color colour = Color.decode(entitylivingbaseIn.getEyeColour());
+        this.model.Torso.copyModelAngles(this.getEntityModel().Torso);
+        this.model.Body.copyModelAngles(this.getEntityModel().Body);
         renderCopyCutoutModelAnimated(this.getEntityModel(), this.model, GECKO_EYES, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, colour.getRed(), colour.getGreen(), colour.getBlue());
     }
 
