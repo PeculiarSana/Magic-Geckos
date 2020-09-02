@@ -52,10 +52,8 @@ import java.util.function.Predicate;
 // Head Looking
 public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
-    private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> GECKO_BODY = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, ResourceLocation> GECKO_BASE_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
+    private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
+    public static final Map<Integer, ResourceLocation> BASE_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
         typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
         typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
         typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
@@ -63,18 +61,26 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
         typeTex.put(100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
     });
-    //Eye Colours Map
+    private static final DataParameter<Integer> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
     public static final Map<Integer, String> EYE_COLOUR_HEX = Util.make(Maps.newHashMap(), (eyeCol) -> {
         eyeCol.put(0, "#000000");//Black
         eyeCol.put(1, "#8A8A8A");//Silver
         eyeCol.put(2, "#9E0000");//Red
-        eyeCol.put(3, "#9E0000");//Pink
+        eyeCol.put(3, "#FFD3F7");//Pink
     });
-    public static final Map<Integer, ResourceLocation> GECKO_BODY_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
+    private static final DataParameter<Integer> PATTERN = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
+    public static final Map<Integer, ResourceLocation> PATTERN_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
         typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/stripe.png"));
         typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/drops.png"));
         typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/jungle.png"));
         typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/reverse_stripe.png"));
+    });
+    private static final DataParameter<Integer> PATTERN_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
+    public static final Map<Integer, String> PATTERN_COLOUR_HEX = Util.make(Maps.newHashMap(), (patCol) -> {
+        patCol.put(0, "#000000");//Black
+        patCol.put(1, "#270000");//Maroon
+        patCol.put(2, "#FFFFFF");//White
+        patCol.put(3, "#FFD3F7");//Pink
     });
     //Food List
     private static final List<Item> FOOD_ITEMS = Util.make(new ArrayList<Item>(), (list) -> {
@@ -97,7 +103,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     public ResourceLocation getGeckoTypeTex() {
-        return GECKO_BASE_TEX.getOrDefault(this.getGeckoType(), GECKO_BASE_TEX.get(0));
+        return BASE_TEX.getOrDefault(this.getGeckoType(), BASE_TEX.get(0));
     }
 
     @Override
@@ -116,11 +122,11 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     public int getGeckoType() {
-         return this.dataManager.get(GECKO_TYPE);
+         return this.dataManager.get(TYPE);
     }
 
     public void setGeckoType(int type) {
-        this.dataManager.set(GECKO_TYPE, type);
+        this.dataManager.set(TYPE, type);
     }
 
     public String getEyeColour() {
@@ -132,24 +138,37 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         this.dataManager.set(EYE_COLOUR, colour);
     }
 
-    public int getBodyTex() {
-        return this.dataManager.get(GECKO_BODY);
+    public int getPattern() {
+        return this.dataManager.get(PATTERN);
     }
 
-    public void setBodyTex(int body) {
-        this.dataManager.set(GECKO_BODY, body);
+    public void setPattern(int body) {
+        this.dataManager.set(PATTERN, body);
+    }
+
+    public String getPatternColour(){
+        int key = this.getPattern();
+        return this.PATTERN_COLOUR_HEX.get(key);
+    }
+
+    public void setPatternColour(int colour) {
+        this.dataManager.set(PATTERN_COLOUR, colour);
     }
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putInt("Type", this.getGeckoType());
         compound.putInt("Eyes", this.dataManager.get(EYE_COLOUR));
+        compound.putInt("Pattern", this.getPattern());
+        compound.putInt("PatternColour", this.dataManager.get(PATTERN_COLOUR));
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.setGeckoType(compound.getInt("Type"));
         this.setEyeColour(compound.getInt("Eyes"));
+        this.setPattern(compound.getInt("Pattern"));
+        this.setPatternColour(compound.getInt("PatternColour"));
     }
 
     @Override
@@ -165,14 +184,18 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(GECKO_TYPE, 1);
+        this.dataManager.register(TYPE, 1);
         this.dataManager.register(EYE_COLOUR, 1);
+        this.dataManager.register(PATTERN, 1);
+        this.dataManager.register(PATTERN_COLOUR, 1);
     }
 
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGeckoType(this.rand.nextInt(5));
         this.setEyeColour(this.rand.nextInt(4));
+        this.setPattern(this.rand.nextInt(4));
+        this.setPatternColour(this.rand.nextInt(4));
         return spawnDataIn;
     }
 
@@ -276,9 +299,13 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     private <E extends Entity> boolean animationPredicate(AnimationTestEvent<E> event) {
-        controller.setAnimation(new AnimationBuilder()
-                .addAnimation("animation.magicgeckos.gecko_walk", true));
-        return true;
+        if (event.isWalking())
+        {
+            controller.setAnimation(new AnimationBuilder()
+                    .addAnimation("animation.magicgeckos.gecko_walk", true));
+            return true;
+        }
+        return event.isWalking();
     }
 
     private void registerAnimationControllers() {

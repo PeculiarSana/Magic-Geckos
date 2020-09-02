@@ -1,5 +1,6 @@
 package com.github.peculiarsana.magicgeckos.client.renderer.entity;
 
+import com.github.peculiarsana.magicgeckos.client.renderer.entity.layers.GeckoBodyLayer;
 import com.github.peculiarsana.magicgeckos.client.renderer.entity.layers.GeckoEyeLayer;
 import com.github.peculiarsana.magicgeckos.client.renderer.entity.model.GeckoModel;
 import com.github.peculiarsana.magicgeckos.entities.GeckoEntity;
@@ -18,7 +19,8 @@ public class GeckoRenderer extends MobRenderer<GeckoEntity, GeckoModel> {
 
     public GeckoRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new GeckoModel(), 0.2f);
-        this.addLayer(new GeckoEyeLayer(this));
+        //this.addLayer(new GeckoEyeLayer(this));
+        this.addLayer(new GeckoBodyLayer(this));
     }
 
     protected void preRenderCallback(GeckoEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
