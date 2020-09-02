@@ -38,6 +38,7 @@ import software.bernie.geckolib.manager.EntityAnimationManager;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -191,28 +192,33 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     //TODO: Make sure they can path to the item before navigating
     // All nearby geckos share the same target no matter their distance from it
     class FindItemsGoal extends Goal {
+        public FindItemsGoal() {
+            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
 
         @Override
         public boolean shouldExecute() {
-            List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class,
-                    GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
-            if (!list.isEmpty()) {MagicGeckos.LOGGER.debug(GeckoEntity.this.getEntityId() + " : " + list.get(0));}
-            return !list.isEmpty();
+            if (GeckoEntity.this.rand.nextInt(17) != 0) { return false;}
+            else {
+                List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class,
+                        GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
+                return !list.isEmpty();
+            }
         }
 
         @Override
         public void tick() {
             List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class, GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
             if (!list.isEmpty()) {
-                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F);
-                manager.setAnimationSpeed(1.5D);
-                controller.setAnimation(new AnimationBuilder()
-                        .addAnimation("animation.magicgeckos.gecko_walk", true));
-                if (!GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F))
+                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)2.0F);
+                manager.setAnimationSpeed(2.5D);
+                //controller.setAnimation(new AnimationBuilder().addAnimation("animation.magicgeckos.gecko_walk", true));
+                if (!GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)2.0F) && GeckoEntity.this.getPosition().withinDistance(list.get(0).getPosition(), 1.0D))
                 {
                     //TODO: Remove 1 item at a time
                     playSound(ModSoundEvents.GECKO_NOM.get(), 1.0F, 1.0F);
-                    list.get(0).remove();
+                    list.get(0).getItem().shrink(1);
+                    list.clear();
                 }
             }
         }
@@ -220,10 +226,9 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         public void startExecuting() {
             List<ItemEntity> list = GeckoEntity.this.world.getEntitiesWithinAABB(ItemEntity.class, GeckoEntity.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), GeckoEntity.TARGET_SELECTOR);
             if (!list.isEmpty()) {
-                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)1.2F);
-                manager.setAnimationSpeed(1.5D);
-                controller.setAnimation(new AnimationBuilder()
-                        .addAnimation("animation.magicgeckos.gecko_walk", true));
+                GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)2.0F);
+                manager.setAnimationSpeed(2.5D);
+                //controller.setAnimation(new AnimationBuilder().addAnimation("animation.magicgeckos.gecko_walk", true));
             }
         }
     }
