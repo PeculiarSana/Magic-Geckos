@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -23,7 +22,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -37,9 +35,7 @@ import software.bernie.geckolib.event.AnimationTestEvent;
 import software.bernie.geckolib.manager.EntityAnimationManager;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -58,7 +54,8 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, ResourceLocation> TEXTURE_BY_ID = Util.make(Maps.newHashMap(), (typeTex) -> {
+    private static final DataParameter<Integer> GECKO_BODY = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
+    public static final Map<Integer, ResourceLocation> GECKO_BASE_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
         typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
         typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
         typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
@@ -72,6 +69,12 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         eyeCol.put(1, "#8A8A8A");//Silver
         eyeCol.put(2, "#9E0000");//Red
         eyeCol.put(3, "#9E0000");//Pink
+    });
+    public static final Map<Integer, ResourceLocation> GECKO_BODY_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
+        typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/stripe.png"));
+        typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/drops.png"));
+        typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/jungle.png"));
+        typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/reverse_stripe.png"));
     });
     //Food List
     private static final List<Item> FOOD_ITEMS = Util.make(new ArrayList<Item>(), (list) -> {
@@ -94,7 +97,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     public ResourceLocation getGeckoTypeTex() {
-        return TEXTURE_BY_ID.getOrDefault(this.getGeckoType(), TEXTURE_BY_ID.get(0));
+        return GECKO_BASE_TEX.getOrDefault(this.getGeckoType(), GECKO_BASE_TEX.get(0));
     }
 
     @Override
@@ -127,6 +130,14 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     public void setEyeColour(int colour) {
         this.dataManager.set(EYE_COLOUR, colour);
+    }
+
+    public int getBodyTex() {
+        return this.dataManager.get(GECKO_BODY);
+    }
+
+    public void setBodyTex(int body) {
+        this.dataManager.set(GECKO_BODY, body);
     }
 
     public void writeAdditional(CompoundNBT compound) {
@@ -265,12 +276,9 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     private <E extends Entity> boolean animationPredicate(AnimationTestEvent<E> event) {
-        if (event.isWalking()) {
-            controller.setAnimation(new AnimationBuilder()
-                    .addAnimation("animation.magicgeckos.gecko_walk", true));
-            return true;
-        }
-        return event.isWalking();
+        controller.setAnimation(new AnimationBuilder()
+                .addAnimation("animation.magicgeckos.gecko_walk", true));
+        return true;
     }
 
     private void registerAnimationControllers() {

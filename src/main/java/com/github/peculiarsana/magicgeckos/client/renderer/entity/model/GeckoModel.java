@@ -10,9 +10,9 @@ import software.bernie.geckolib.animation.render.AnimatedModelRenderer;
 
 @OnlyIn(Dist.CLIENT)
 public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
-    private final AnimatedModelRenderer Body;
-    private final AnimatedModelRenderer Torso;
-    private final AnimatedModelRenderer Head;
+    public final AnimatedModelRenderer Body;
+    public final AnimatedModelRenderer Torso;
+    public final AnimatedModelRenderer Head;
     private final AnimatedModelRenderer Leg_FR1;
     private final AnimatedModelRenderer Leg_FR2;
     private final AnimatedModelRenderer Leg_FL1;
