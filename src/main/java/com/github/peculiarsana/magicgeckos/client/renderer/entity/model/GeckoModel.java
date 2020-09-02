@@ -1,11 +1,14 @@
 
-package com.github.peculiarsana.magicgeckos.client.entity.renderer.model;
+package com.github.peculiarsana.magicgeckos.client.renderer.entity.model;
 
 import com.github.peculiarsana.magicgeckos.entities.GeckoEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.animation.model.AnimatedEntityModel;
 import software.bernie.geckolib.animation.render.AnimatedModelRenderer;
 
+@OnlyIn(Dist.CLIENT)
 public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
     private final AnimatedModelRenderer Body;
     private final AnimatedModelRenderer Torso;

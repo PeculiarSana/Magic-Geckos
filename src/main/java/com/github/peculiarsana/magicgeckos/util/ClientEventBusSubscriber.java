@@ -1,7 +1,7 @@
 package com.github.peculiarsana.magicgeckos.util;
 
 import com.github.peculiarsana.magicgeckos.MagicGeckos;
-import com.github.peculiarsana.magicgeckos.client.entity.renderer.GeckoRenderer;
+import com.github.peculiarsana.magicgeckos.client.renderer.entity.GeckoRenderer;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -37,6 +37,7 @@ import software.bernie.geckolib.event.AnimationTestEvent;
 import software.bernie.geckolib.manager.EntityAnimationManager;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -56,6 +57,7 @@ import java.util.function.Predicate;
 public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     private static final DataParameter<Integer> GECKO_TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
     public static final Map<Integer, ResourceLocation> TEXTURE_BY_ID = Util.make(Maps.newHashMap(), (typeTex) -> {
         typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
         typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
@@ -64,7 +66,14 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
         typeTex.put(100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
     });
-    //List containing all food items for Geckos
+    //Eye Colours Map
+    public static final Map<Integer, String> EYE_COLOUR_HEX = Util.make(Maps.newHashMap(), (eyeCol) -> {
+        eyeCol.put(0, "#000000");//Black
+        eyeCol.put(1, "#8A8A8A");//Silver
+        eyeCol.put(2, "#9E0000");//Red
+        eyeCol.put(3, "#9E0000");//Pink
+    });
+    //Food List
     private static final List<Item> FOOD_ITEMS = Util.make(new ArrayList<Item>(), (list) -> {
         list.add(ItemInit.WORM.get());
     });
@@ -108,17 +117,28 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     public void setGeckoType(int type) {
-        dataManager.set(GECKO_TYPE, type);
+        this.dataManager.set(GECKO_TYPE, type);
+    }
+
+    public String getEyeColour() {
+        int key = this.dataManager.get(EYE_COLOUR);
+        return this.EYE_COLOUR_HEX.get(key);
+    }
+
+    public void setEyeColour(int colour) {
+        this.dataManager.set(EYE_COLOUR, colour);
     }
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putInt("GeckoType", this.getGeckoType());
+        compound.putInt("Type", this.getGeckoType());
+        compound.putInt("Eyes", this.dataManager.get(EYE_COLOUR));
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.setGeckoType(compound.getInt("GeckoType"));
+        this.setGeckoType(compound.getInt("Type"));
+        this.setEyeColour(compound.getInt("Eyes"));
     }
 
     @Override
@@ -135,11 +155,13 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(GECKO_TYPE, 1);
+        this.dataManager.register(EYE_COLOUR, 1);
     }
 
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGeckoType(this.rand.nextInt(5));
+        this.setEyeColour(this.rand.nextInt(4));
         return spawnDataIn;
     }
 
@@ -189,12 +211,10 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
     }
 
     //Goal to allow the Geckos to look for and navigate towards items in FOOD_ITEMS
-    //TODO: Make sure they can path to the item before navigating
-    // All nearby geckos share the same target no matter their distance from it
     class FindItemsGoal extends Goal {
-        public FindItemsGoal() {
+        /*public FindItemsGoal() {
             this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
-        }
+        }*/
 
         @Override
         public boolean shouldExecute() {

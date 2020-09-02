@@ -1,10 +1,12 @@
-package com.github.peculiarsana.magicgeckos.client.entity.renderer;
+package com.github.peculiarsana.magicgeckos.client.renderer.entity;
 
+import com.github.peculiarsana.magicgeckos.client.renderer.entity.layers.GeckoEyeLayer;
+import com.github.peculiarsana.magicgeckos.client.renderer.entity.model.GeckoModel;
 import com.github.peculiarsana.magicgeckos.entities.GeckoEntity;
-import com.github.peculiarsana.magicgeckos.client.entity.renderer.model.GeckoModel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.CatCollarLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,6 +18,7 @@ public class GeckoRenderer extends MobRenderer<GeckoEntity, GeckoModel> {
 
     public GeckoRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new GeckoModel(), 0.2f);
+        this.addLayer(new GeckoEyeLayer(this));
     }
 
     protected void preRenderCallback(GeckoEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
