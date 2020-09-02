@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib.GeckoLib;
 
 import java.awt.*;
 
@@ -33,6 +34,10 @@ public class GeckoEyeLayer extends LayerRenderer<GeckoEntity, GeckoModel> {
         renderCopyCutoutModelAnimated(this.getEntityModel(), this.model, GECKO_EYES, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, colour.getRed(), colour.getGreen(), colour.getBlue());
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ad808e28635beb1acd7d03ba177ec764d58606b6
     protected static <T extends LivingEntity> void renderCopyCutoutModelAnimated(EntityModel<T> modelParentIn, EntityModel<T> modelIn, ResourceLocation textureLocationIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float partialTicks, float red, float green, float blue) {
         if (!entityIn.isInvisible()) {
             modelParentIn.copyModelAttributesTo(modelIn);
