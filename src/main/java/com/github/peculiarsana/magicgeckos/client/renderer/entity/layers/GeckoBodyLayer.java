@@ -24,11 +24,16 @@ public class GeckoBodyLayer extends LayerRenderer<GeckoEntity, GeckoModel> {
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, GeckoEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        Color colour = Color.decode(entitylivingbaseIn.getPatternColour());
-        ResourceLocation GECKO_PATTERN = entitylivingbaseIn.PATTERN_TEX.get(entitylivingbaseIn.getPattern());
-        this.model.Torso.copyModelAngles(this.getEntityModel().Torso);
-        this.model.Body.copyModelAngles(this.getEntityModel().Body);
-        renderCopyCutoutModelAnimated(this.getEntityModel(), this.model, GECKO_PATTERN, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, colour.getRed(), colour.getGreen(), colour.getBlue());
+        if (entitylivingbaseIn.getGeckoType() != 100 && entitylivingbaseIn.getPattern() != 0) {
+            Color colour = Color.decode(entitylivingbaseIn.getPatternColour());
+            float red = (float)colour.getRed() / 255;
+            float green = (float)colour.getGreen() / 255;
+            float blue = (float)colour.getBlue() / 255;
+            ResourceLocation GECKO_PATTERN = entitylivingbaseIn.PATTERN_TEX.get(entitylivingbaseIn.getPattern());
+            this.model.Torso.copyModelAngles(this.getEntityModel().Torso);
+            this.model.Body.copyModelAngles(this.getEntityModel().Body);
+            renderCopyCutoutModelAnimated(this.getEntityModel(), this.model, GECKO_PATTERN, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, red, green, blue);
+        }
     }
 
     protected static <T extends LivingEntity> void renderCopyCutoutModelAnimated(EntityModel<T> modelParentIn, EntityModel<T> modelIn, ResourceLocation textureLocationIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float partialTicks, float red, float green, float blue) {

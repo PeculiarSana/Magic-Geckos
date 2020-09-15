@@ -14,18 +14,23 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
 public class GeckoRenderer extends MobRenderer<GeckoEntity, GeckoModel> {
 
     public GeckoRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new GeckoModel(), 0.2f);
-        //this.addLayer(new GeckoEyeLayer(this));
+        this.addLayer(new GeckoEyeLayer(this));
         this.addLayer(new GeckoBodyLayer(this));
     }
 
     protected void preRenderCallback(GeckoEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
         super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
-        matrixStackIn.scale(0.7F, 0.7F, 0.7F);
+        if (entitylivingbaseIn.isChild()){
+            matrixStackIn.scale(0.4F, 0.4F, 0.4F);
+        }
+        else
+        {
+            matrixStackIn.scale(0.7F, 0.7F, 0.7F);
+        }
     }
 
     @Nullable

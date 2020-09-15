@@ -3,6 +3,7 @@ package com.github.peculiarsana.magicgeckos;
 import com.github.peculiarsana.magicgeckos.init.BlockInit;
 import com.github.peculiarsana.magicgeckos.init.ItemInit;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
+import com.github.peculiarsana.magicgeckos.init.SpawnRegistry;
 import com.github.peculiarsana.magicgeckos.items.ModSpawnEggItem;
 import com.github.peculiarsana.magicgeckos.util.ModSoundEvents;
 import net.minecraft.entity.EntityType;
@@ -29,7 +30,6 @@ import org.apache.logging.log4j.Logger;
 @Mod.EventBusSubscriber(modid = MagicGeckos.MODID, bus = Bus.MOD)
 public class MagicGeckos {
     public static final String MODID = "magicgeckos";
-    public static final Logger LOGGER = LogManager.getLogger();
     public static MagicGeckos instance;
 
     public MagicGeckos() {
@@ -67,7 +67,7 @@ public class MagicGeckos {
 
     @SubscribeEvent
     public void serverSetup(FMLServerStartingEvent event) {
-
+        SpawnRegistry.addSpawn();
     }
 
     public static class MagicGeckosItemGroup extends ItemGroup {

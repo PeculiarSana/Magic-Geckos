@@ -42,8 +42,6 @@ import java.util.function.Predicate;
 
 //TODO:
 // Ability to cling onto walls
-// Spawning in warm biomes
-// Babies
 // Taming
 // Drops
 // Sound Effects
@@ -52,35 +50,36 @@ import java.util.function.Predicate;
 // Head Looking
 public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
-    private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, ResourceLocation> BASE_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
-        typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
-        typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
-        typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
-        typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/super_snow.png"));
-        typeTex.put(4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
-        typeTex.put(100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
+    private static final DataParameter<Byte> TYPE = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.BYTE);
+    public static final Map<Byte, ResourceLocation> BASE_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
+        typeTex.put((byte)0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/normal.png"));
+        typeTex.put((byte)1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/black_velvet.png"));
+        typeTex.put((byte)2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/radar.png"));
+        typeTex.put((byte)3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/super_snow.png"));
+        typeTex.put((byte)4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/creamsicle.png"));
+        typeTex.put((byte)100, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/acrid.png"));
     });
-    private static final DataParameter<Integer> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, String> EYE_COLOUR_HEX = Util.make(Maps.newHashMap(), (eyeCol) -> {
-        eyeCol.put(0, "#000000");//Black
-        eyeCol.put(1, "#8A8A8A");//Silver
-        eyeCol.put(2, "#9E0000");//Red
-        eyeCol.put(3, "#FFD3F7");//Pink
+    private static final DataParameter<Byte> EYE_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.BYTE);
+    public static final Map<Byte, String> EYE_COLOUR_HEX = Util.make(Maps.newHashMap(), (eyeCol) -> {
+        eyeCol.put((byte)0, "#000000");//Black
+        eyeCol.put((byte)1, "#8A8A8A");//Silver
+        eyeCol.put((byte)2, "#9E0000");//Red
+        eyeCol.put((byte)3, "#FFD3F7");//Pink
     });
-    private static final DataParameter<Integer> PATTERN = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, ResourceLocation> PATTERN_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
-        typeTex.put(0, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/stripe.png"));
-        typeTex.put(1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/drops.png"));
-        typeTex.put(2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/jungle.png"));
-        typeTex.put(3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/reverse_stripe.png"));
+    private static final DataParameter<Byte> PATTERN = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.BYTE);
+    public static final Map<Byte, ResourceLocation> PATTERN_TEX = Util.make(Maps.newHashMap(), (typeTex) -> {
+        typeTex.put((byte)0, new ResourceLocation(""));
+        typeTex.put((byte)1, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/stripe.png"));
+        typeTex.put((byte)2, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/drops.png"));
+        typeTex.put((byte)3, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/jungle.png"));
+        typeTex.put((byte)4, new ResourceLocation(MagicGeckos.MODID + ":textures/entity/gecko/body/reverse_stripe.png"));
     });
-    private static final DataParameter<Integer> PATTERN_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.VARINT);
-    public static final Map<Integer, String> PATTERN_COLOUR_HEX = Util.make(Maps.newHashMap(), (patCol) -> {
-        patCol.put(0, "#000000");//Black
-        patCol.put(1, "#270000");//Maroon
-        patCol.put(2, "#FFFFFF");//White
-        patCol.put(3, "#FFD3F7");//Pink
+    private static final DataParameter<Byte> PATTERN_COLOUR = EntityDataManager.createKey(GeckoEntity.class, DataSerializers.BYTE);
+    public static final Map<Byte, String> PATTERN_COLOUR_HEX = Util.make(Maps.newHashMap(), (patCol) -> {
+        patCol.put((byte)0, "#000000");//Black
+        patCol.put((byte)1, "#270000");//Maroon
+        patCol.put((byte)2, "#FFFFFF");//White
+        patCol.put((byte)3, "#FFD3F7");//Pink
     });
     //Food List
     private static final List<Item> FOOD_ITEMS = Util.make(new ArrayList<Item>(), (list) -> {
@@ -106,6 +105,7 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         return BASE_TEX.getOrDefault(this.getGeckoType(), BASE_TEX.get(0));
     }
 
+    //Controls what occurs when clicked with an egg
     @Override
     public AgeableEntity createChild(AgeableEntity ageable) {
         GeckoEntity entity = new GeckoEntity(ModEntityTypes.GECKO.get(), this.world);
@@ -117,58 +117,58 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
             } else {
                 entity.setGeckoType(((GeckoEntity) ageable).getGeckoType());
             }
+            entity.setGrowingAge(-20000);
         }
         return entity;
     }
 
-    public int getGeckoType() {
+    public byte getGeckoType() {
          return this.dataManager.get(TYPE);
     }
 
-    public void setGeckoType(int type) {
+    public void setGeckoType(byte type) {
         this.dataManager.set(TYPE, type);
     }
 
     public String getEyeColour() {
-        int key = this.dataManager.get(EYE_COLOUR);
-        return this.EYE_COLOUR_HEX.get(key);
+        byte key = this.dataManager.get(EYE_COLOUR);
+        return EYE_COLOUR_HEX.get(key);
     }
 
-    public void setEyeColour(int colour) {
+    public void setEyeColour(byte colour) {
         this.dataManager.set(EYE_COLOUR, colour);
     }
 
-    public int getPattern() {
+    public byte getPattern() {
         return this.dataManager.get(PATTERN);
     }
 
-    public void setPattern(int body) {
+    public void setPattern(byte body) {
         this.dataManager.set(PATTERN, body);
     }
 
     public String getPatternColour(){
-        int key = this.getPattern();
-        return this.PATTERN_COLOUR_HEX.get(key);
+        return PATTERN_COLOUR_HEX.get(this.dataManager.get(PATTERN_COLOUR));
     }
 
-    public void setPatternColour(int colour) {
+    public void setPatternColour(byte colour) {
         this.dataManager.set(PATTERN_COLOUR, colour);
     }
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putInt("Type", this.getGeckoType());
-        compound.putInt("Eyes", this.dataManager.get(EYE_COLOUR));
-        compound.putInt("Pattern", this.getPattern());
-        compound.putInt("PatternColour", this.dataManager.get(PATTERN_COLOUR));
+        compound.putByte("Type", this.getGeckoType());
+        compound.putByte("Eyes", this.dataManager.get(EYE_COLOUR));
+        compound.putByte("Pattern", this.getPattern());
+        compound.putByte("PatternColour", this.dataManager.get(PATTERN_COLOUR));
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.setGeckoType(compound.getInt("Type"));
-        this.setEyeColour(compound.getInt("Eyes"));
-        this.setPattern(compound.getInt("Pattern"));
-        this.setPatternColour(compound.getInt("PatternColour"));
+        this.setGeckoType(compound.getByte("Type"));
+        this.setEyeColour(compound.getByte("Eyes"));
+        this.setPattern(compound.getByte("Pattern"));
+        this.setPatternColour(compound.getByte("PatternColour"));
     }
 
     @Override
@@ -184,18 +184,19 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(TYPE, 1);
-        this.dataManager.register(EYE_COLOUR, 1);
-        this.dataManager.register(PATTERN, 1);
-        this.dataManager.register(PATTERN_COLOUR, 1);
+        this.dataManager.register(TYPE, (byte)1);
+        this.dataManager.register(EYE_COLOUR, (byte)1);
+        this.dataManager.register(PATTERN, (byte)1);
+        this.dataManager.register(PATTERN_COLOUR, (byte)1);
     }
 
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setGeckoType(this.rand.nextInt(5));
-        this.setEyeColour(this.rand.nextInt(4));
-        this.setPattern(this.rand.nextInt(4));
-        this.setPatternColour(this.rand.nextInt(4));
+        this.setGeckoType((byte)this.rand.nextInt(5));
+        this.setEyeColour((byte)this.rand.nextInt(4));
+        this.setPattern((byte)this.rand.nextInt(5));
+        this.setPatternColour((byte)this.rand.nextInt(4));
+
         return spawnDataIn;
     }
 
@@ -266,10 +267,8 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
             if (!list.isEmpty()) {
                 GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)2.0F);
                 manager.setAnimationSpeed(2.5D);
-                //controller.setAnimation(new AnimationBuilder().addAnimation("animation.magicgeckos.gecko_walk", true));
                 if (!GeckoEntity.this.tryMoveToEntityLiving(list.get(0), (double)2.0F) && GeckoEntity.this.getPosition().withinDistance(list.get(0).getPosition(), 1.0D))
                 {
-                    //TODO: Remove 1 item at a time
                     playSound(ModSoundEvents.GECKO_NOM.get(), 1.0F, 1.0F);
                     list.get(0).getItem().shrink(1);
                     list.clear();
@@ -291,6 +290,10 @@ public class GeckoEntity extends TameableEntity implements IAnimatedEntity {
         //p_75494_2_ is the distance to stop from target entity, relative to the block it's on
         Path path = this.getNavigator().getPathToEntity(entityIn, 0);
         return path != null && this.getNavigator().setPath(path, speedIn);
+    }
+
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        return sizeIn.height * 0.8f;
     }
 
     @Override

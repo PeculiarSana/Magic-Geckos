@@ -1,6 +1,7 @@
 package com.github.peculiarsana.magicgeckos.util;
 
 import com.github.peculiarsana.magicgeckos.MagicGeckos;
+import com.github.peculiarsana.magicgeckos.client.renderer.entity.GeckoEggRenderer;
 import com.github.peculiarsana.magicgeckos.client.renderer.entity.GeckoRenderer;
 import com.github.peculiarsana.magicgeckos.init.ModEntityTypes;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,5 +16,6 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GECKO.get(), GeckoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GECKO_EGG.get(), GeckoEggRenderer::new);
     }
 }

@@ -8,7 +8,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.animation.model.AnimatedEntityModel;
 import software.bernie.geckolib.animation.render.AnimatedModelRenderer;
 
-@OnlyIn(Dist.CLIENT)
 public class GeckoModel extends AnimatedEntityModel<GeckoEntity> {
     public final AnimatedModelRenderer Body;
     public final AnimatedModelRenderer Torso;
